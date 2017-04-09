@@ -1,0 +1,67 @@
+Dynamic sparse table
+
+W celu przechowywania wartoœci indeksowanych rzadkimi kluczami z pewnego uniwersum N dobrym rozwi¹zaniem wydaj¹ siê byæ tablice haszowane. Minusem ich zastosowania mo¿e byæ kiepski czas dostêpu w pesymistycznym przypadku. Innym sposobem poradzenia sobie z tym zadaniem jest zastosowanie drzewa trie, które charakteryzuje siê lepszym oszacowaniem przypadku pesymistycznego. 
+
+W naszym zadaniu drzewo trie opisane jest dwoma parametrami: n i k. Budowane jest w nastêpuj¹cy sposób: korzeñ zawiera n wêz³ów potomnych a ka¿dy wêze³ potomny posiada kolejne k wêz³ów potomnych. Wstawianie klucza x zaczynamy od korzenia i jeœli jest on wolny (ka¿dy wêze³ przechowuje maksymalnie jeden klucz i ewentualnie skojarzon¹ z ni¹ wartoœæ – w naszym przypadku bêdzie to jedynie klucz) to zapisujemy wstawian¹ wartoœæ do wêz³a i koñczymy operacjê. W przypadku kiedy korzeñ jest ju¿ zajêty szukamy dla niego miejsca wybieraj¹c kolejny wêze³ potomny równy div = x mod n a nastêpnie div = div mod 4, a¿ natrafimy na wolne miejsce. Wyszukiwanie wykonujemy analogicznie rozpoczynaj¹c od korzenia i przegl¹daj¹c kolejne wêz³y o indeksach mod n a nastêpnie mod k a¿ do znalezienia wartoœci x albo trafienia na pusty wêze³ potomny (brak klucza w drzewie). Kasowanie jest trochê trudniejsze i wymaga odszukania wêz³a p z dan¹ wartoœci¹ klucza oraz, w przypadku kiedy jest to wêze³ wewnêtrzny, kandydata do skasowania. Kandydata q mo¿emy wyszukiwaæ na ró¿ne sposoby jednak¿e zawsze musi to byæ wêze³ zewnêtrzny (nie posiadaj¹cy potomstwa). My zastosujemy prost¹ strategiê szukania zawsze na lewo. Jeœli znajdziemy kandydata to przepisujemy wartoœæ w miejsce usuwanego klucza x w wêŸle p i usuwamy wêze³ q. 
+
+Wiêcej informacji na Storing a sparse table .
+Wejœcie
+
+Pierwszy wiersz zawiera liczbê n okreœlaj¹c¹ liczbê przypadków testowych (komendy I, L, D oraz P – wstaw, wyszukaj, usuñ i przegl¹daj), ka¿dy w nowej linii. W kolejnym wierszu podane zostan¹ dwie liczby minimum i maksimum okreœlaj¹ce jak wielkie liczby mog¹ pojawiæ siê na wejœciu. W kolejnym wierszu kolejne dwie liczby to parametry n i k naszego drzewa trie. Nastêpnie, po pustej linii wyst¹pi n przypadków testowych, o których by³a mowa na pocz¹tku. Komenda:
+I x – powoduje wstawienie klucza x do drzewa. Jeœli ju¿ taki tam siê znajduje to wypisuje jedynie informacjê x exist, w przeciwnym wypadku niczego nie wypisuje.
+L x – wyœwietla informacjê x exist w przypadku odszukania klucza oraz x not exist w przeciwnym przypadku.
+D x – kasuje klucz x z drzewa. W przypadku niepowodzenia (brak klucza) wypisuje informacjê: x not exist. W przypadku poprawnego wstawienia do drzewa niczego nie wyœwietla. Do skasowania wybierany jest potomny wêze³ zewnêtrzny po³o¿ony najbardziej po lewej wêz³a zawieraj¹cego klucz x albo wêze³ zawieraj¹cy x – jeœli nie posiada on potomków.
+P – wyœwietla zawartoœæ drzewa w kolejnoœci inorder. Je¿eli podczas operacji kasowania (D x) nie bêdzie wybierany pierwszy wêze³ potomny najbardziej po lewej, bêd¹cy wêz³em zewnêtrznym, to kszta³t drzewa bêdzie siê ró¿ni³, co wp³ynie na kolejnoœæ inorder i ostatecznie na wynik.
+Wyjœcie
+
+Kolejne linie zawieraj¹ce informacje bêd¹ce rezultatem u¿ycia komend (I, L, D, P) albo brak linii w przypadku braku takiej informacji (w przypadku poprawnego dodania b¹dŸ skasowania x).
+Przyk³ad
+
+Wejœcie
+29
+0 511
+8 4
+
+I 3
+I 31
+I 150
+I 190
+I 130
+I 174
+I 81
+I 30
+I 203
+P
+L 32
+L 30
+L 150
+D 150
+L 150
+I 150
+L 150
+D 3
+L 3
+I 3
+L 3
+D 3
+L 3
+D 30
+L 30
+I 30
+L 30
+D 30
+L 30
+
+Wyjœcie
+3 81 130 203 150 174 190 30 31 
+32 not exist
+30 exist
+150 exist
+150 not exist
+150 exist
+3 not exist
+3 exist
+3 not exist
+30 not exist
+30 exist
+30 not exist
